@@ -1,0 +1,40 @@
+This program is supposed to simulate playing a game of Bingo by drawing random numbers and marking the card appropriatly
+
+Sample input file: 
+12 28 31 49 66
+3 26 45 53 75
+10 17 33 59 67
+7 19 42 55 74 
+2 23 37 46 70
+
+Sample output: 
+ print out all picked number and Horizontal Win after X picks!
+ X X X X X
+ 3 26 X 53 75
+ X X X 59 67
+ X 19 42 55 X
+ 2 X 37 46 X
+ 
+ My Algorithm: 
+ 
+ I wrote a method to fill up the card from an input file
+ 
+ I wrote a method to print out the card using nested for loops 
+ and if it sees a 0, to print out an X instead
+ 
+ My play game method takes a bitset, the card, and an array list as parameters
+ It calls the pullNum method to recieve a random number and then checks to see if it is false
+ if the number is false it pulls another number until one returns true and then uses that number
+ to play the game and then set it to false so it is not used again 
+ 
+ in my main method, it checks to see if my card is a win
+ if the card is not a win it calls the playGame method and 
+ checks for a win again
+ Once there is a win it goes to the printWin method that prints out 
+ the line of code that relates to the particular type of win 
+ 
+ to check for a win, the checkWin method sums up all the horizontal, 
+ vertical, and diagonal sums and sends back a certian number depending 
+ on the type of win. If there is no win it returns a zero
+ 
+  

@@ -1,0 +1,40 @@
+Script started on Tue 30 Aug 2016 11:07:38 AM EDT
+]0;fowler_l@cobra:~/Labs/Lab1[?1034h[fowler_l@cobra Lab1]$ script Part2
+Script started, file is Part2
+]0;fowler_l@cobra:~/Labs/Lab1[?1034h[fowler_l@cobra Lab1]$ cat Prog2.java
+import java.util.*;
+
+class Prog2
+{
+	public static void main (String[] args)
+		{
+			String data;
+
+			System.out.print("Enter a string: ");
+			Scanner stdin = new Scanner (System.in);
+			data=stdin.nextLine();
+
+			System.out.println("The string has " + data.length() + " characters.");
+
+
+		}
+
+
+
+
+
+
+
+
+
+
+}
+]0;fowler_l@cobra:~/Labs/Lab1[fowler_l@cobra Lab1]$ javac Prog2.java
+]0;fowler_l@cobra:~/Labs/Lab1[fowler_l@cobra Lab1]$ java Prob[Kg2
+Enter a string: lauren
+The string has 6 characters.
+]0;fowler_l@cobra:~/Labs/Lab1[fowler_l@cobra Lab1]$ exit
+exit
+Script done, file is Part2
+]0;fowler_l@cobra:~/Labs/Lab1[fowler_l@cobra Lab1]$ vim FindMin.java
+[?1049h[?1h=[2;1H▽[6n[2;1H  [1;1H[1;34r[?12;25h[?12l[?25h[27m[m[H[2J[?25l[34;1H"FindMin.java" [New File][>c[2;1H[1m[34m~                                                                                                            [3;1H~                                                                                                            [4;1H~                                                                                                            [5;1H~                                                                                                            [6;1H~                                                                                                            [7;1H~                                                                                                            [8;1H~                                                                                                            [9;1H~                                                                                                            [10;1H~                                                                                                            [11;1H~                                                                                                            [12;1H~                                                                                                            [13;1H~                                                                                                            [14;1H~                                                                                                            [15;1H~                                                                                                            [16;1H~                                                                                                            [17;1H~                                                                                                            [18;1H~                                                                                                            [19;1H~                                                                                                            [20;1H~                                                                                                            [21;1H~                                                                                                            [22;1H~                                                                                                            [23;1H~                                                                                                            [24;1H~                                                                                                            [25;1H~                                                                                                            [26;1H~                                                                                                            [27;1H~                                                                                                            [28;1H~                 

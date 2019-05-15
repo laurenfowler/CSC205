@@ -1,0 +1,483 @@
+Script started on Wed 09 Nov 2016 11:22:55 PM EST
+]0;fowler_l@cobra:~/Prog3[?1034h[fowler_l@cobra Prog3]$ cat Personnel.java
+import java.util.*;
+import java.io.*;
+
+public class Personnel
+{
+   public static void main (String[] args)
+   {
+	//initialize employee arraylist
+	ArrayList<Employee> database = new ArrayList<Employee>();
+   	
+	char option=displayMenu();
+	while(option != 'q' &&  option != 'Q')
+	{		     		
+	switch(option)
+	{
+		case 'n': 
+		case 'N':
+			  Employee employee= getInfo();
+			  database.add(employee);
+			  break;
+		case 'c':
+		case 'C':
+			  calculatePay(database);
+			  break;
+		
+		case 'r': 
+		case 'R':
+			  raiseWages(database);
+			  break;
+
+		case 'p':  
+		case 'P':
+			  printRecords(database);
+			  break;
+
+		case 'd':
+		case 'D':
+			  downData(database);
+			  break;
+		case 'u':
+		case 'U':
+			  uploadData(database);
+			  break;
+				
+		default: 
+			System.out.println("Not a valid input");
+	                break;
+
+	}
+	
+	option=displayMenu();
+	}
+   }
+
+
+	//Prints out Menu Options
+	public static char displayMenu()
+	{
+		System.out.println("----------------------------------------");
+		System.out.println("|                                      |");
+		System.out.println("|Commands: n - new employee            |");
+		System.out.println("|          c - Compute paychecks       |");    
+		System.out.println("|          r - Raise wages             |"); 
+		System.out.println("|          p - Print records           |");
+		System.out.println("|          d - Download data           |");
+		System.out.println("|          u - Upload data             |");
+		System.out.println("|          q - Quit                    |");
+		System.out.println("|                                      |");
+		System.out.println("----------------------------------------");
+		
+		Scanner in=new Scanner(System.in);
+		char option=in.nextLine().charAt(0); 
+		return option; 					
+	}
+		
+	//gets the name, type, and salary of new employee
+	public static Employee getInfo()
+	{
+		Scanner in=new Scanner(System.in);
+		System.out.println("Enter the name of the New Employee");
+		String name= in.nextLine(); 
+		System.out.println("Enter h for hourly employee, enter s for salaried");
+		char type=in.nextLine().charAt(0); 
+		double wage=0;		
+
+		if(type=='h' || type=='H')
+		{
+			System.out.println("Enter hourly wage");
+			wage=in.nextDouble(); //in.nextLine();
+			
+		}
+		else if(type=='s' || type== 'S')
+		{
+			System.out.println("Enter annual salary");
+			wage=in.nextDouble(); //in.nextLine();
+		}
+		
+	//calls newEmployee method
+		Employee employ=newEmployee(name, type, wage);
+		return employ;	
+
+	}
+
+	
+	//new Employee method
+	public static Employee newEmployee(String name , char type, double wage)
+	{
+		Employee employ = null;
+		if (type=='s' || type== 'S')
+		{
+			employ= new SalariedEmployee(name, wage);			 	
+		}	
+		else if (type=='h' || type== 'H' )
+		{
+			employ=new HourlyEmployee(name, wage);
+		}
+		else 
+			System.out.println("Incorret input");
+
+		return employ;
+
+		
+	}
+
+	//compute paychecks
+	public static void calculatePay(ArrayList<Employee> database)
+	{	
+		Scanner in=new Scanner(System.in);	
+		double hoursWorked=0;
+		//String x;
+		for(int i=0; i<database.size(); i++)
+		{
+			System.out.println("Please enter the hours worked by " + database.get(i).getName() );
+			hoursWorked=in.nextDouble(); in.nextLine();
+			String pay= toDollars(database.get(i).computePay(hoursWorked));
+			System.out.println("Pay: " + pay);
+		} 		
+		
+	}
+
+	public static void raiseWages(ArrayList <Employee> database)
+	{
+		Scanner in=new Scanner(System.in);
+		System.out.println("Please enter percentage increase");
+		double percent=in.nextDouble(); in.nextLine();
+		for (int i=0; i<database.size(); i++)
+		{
+			database.get(i).setRaise(percent);
+			System.out.println(database.get(i));
+		}	
+
+	}
+
+	public static void printRecords(ArrayList <Employee> database)
+	{
+		for (int i=0; i<database.size(); i++)
+		{
+			System.out.println(database.get(i));	
+		}
+	}	
+
+	public static void downData(ArrayList<Employee> database)	
+	{
+        String fileName = "Employee.dat";
+	//database=null; 
+        try {
+          //Employee[] peeps = null;
+	  ArrayList<Employee> temp = new ArrayList<Employee>();
+	  FileInputStream fileIn =
+            new FileInputStream(fileName);
+          ObjectInputStream in =
+            new ObjectInputStream(fileIn);
+           temp = (ArrayList<Employee>)in.readObject();
+          in.close();
+	  for(int i=0; i<temp.size(); i++)
+		database.add(temp.get(i));
+        }
+        catch (IOException e) {
+          System.out.println(e.getMessage());
+        }
+        catch (ClassNotFoundException e)
+        {
+          System.out.println(e.getMessage());
+        }
+        
+	}
+
+	public static void uploadData(ArrayList <Employee> database)
+	{
+	String fileName = "Employee.dat";
+	
+        try {
+          FileOutputStream fileOut =
+            new FileOutputStream(fileName);
+          ObjectOutputStream out =
+            new ObjectOutputStream(fileOut);
+          out.writeObject(database);
+          out.close();
+        }
+        catch (IOException e) {
+          System.out.println(e.getMessage());	
+	}
+	}
+	
+	public static String toDollars (double amount)
+	{
+	  long roundedAmount = Math.round(amount * 100);
+	  long dollars = roundedAmount / 100;
+    	  long cents = roundedAmount % 100;
+
+	    if (cents <= 9)
+	      return dollars + ".0" + cents;
+	    else
+	      return dollars + "." + cents;	
+	}
+
+}	
+]0;fowler_l@cobra:~/Prog3[fowler_l@cobra Prog3]$ cat Employee.java
+import java.io.Serializable;
+public abstract class Employee implements Serializable
+{
+  private String name;
+  private double hourWage;
+	//constructor
+	protected Employee(String name, double hourWage)
+	{
+	  this.name=name;
+	  this.hourWage=hourWage;  
+	}
+	//GETTER METHODS
+	public String getName()
+	{
+	  return name;
+	}
+
+	public double getWage()
+	{
+	  return hourWage;
+	}
+	
+	//SETTER METHODS
+	
+	//increase hourly wage
+	public void  setRaise(double percent)
+	{
+	   hourWage= hourWage + hourWage*(percent/100);
+	}
+
+	public abstract double computePay(double HoursWorked);
+
+}
+]0;fowler_l@cobra:~/Prog3[fowler_l@cobra Prog3]$ cat SalariedEmployee.java
+import java.io.Serializable;
+public class SalariedEmployee extends Employee implements Serializable
+{
+	private double fixedHours=40;
+	private double fixedYear=2080;
+	double Salary;
+
+	public SalariedEmployee(String name, double hourlyWage)
+	{
+		super(name, (hourlyWage/2080));
+	}
+
+	//returns salary	
+	public double getSalary()
+	{
+		Salary=getWage()*fixedYear;
+		return Salary;
+	}
+
+	//sets salary
+	public void setSalary(double setSalary)
+	{
+		Salary= setSalary; 		
+	}
+
+	
+	public double computePay(double hoursWorked)
+	{			
+		return(getSalary()/52);	
+	}
+
+	public String toString()
+	{
+		String name=getName();
+		double salary=getSalary();
+		String dollars=toDollars(salary);
+		int pad=35-dollars.length();
+		return pad(name, pad) + dollars+"/year";
+	}
+
+
+	 public static String pad(String str, int n)
+	 {
+		if (str.length() > n)
+			return str.substring(0,n);
+		while (str.length() < n)
+			str += " ";
+		return str;
+	}
+
+	public static String toDollars (double amount)
+	{
+	  long roundedAmount = Math.round(amount * 100);
+	  long dollars = roundedAmount / 100;
+    	  long cents = roundedAmount % 100;
+
+	    if (cents <= 9)
+	      return dollars + ".0" + cents;
+	    else
+	      return dollars + "." + cents;	
+	}
+
+}
+]0;fowler_l@cobra:~/Prog3[fowler_l@cobra Prog3]$ cat HourlyEmployee.java
+import java.io.Serializable;
+public class HourlyEmployee extends Employee implements Serializable
+{
+	double hoursWorked;	
+
+	public HourlyEmployee(String name, double hourlyWage)
+	{
+		super(name, hourlyWage);
+	}
+
+	public double computePay(double hoursWorked)
+	{	
+		this.hoursWorked=hoursWorked;
+		double wage=getWage();
+		double weekWage;
+		double overtime=0;
+		double extraPay;
+		double incrWage=wage*1.5;
+
+		if(hoursWorked<=40.0)
+			weekWage=wage*hoursWorked;
+		else
+			overtime=hoursWorked-40.0;
+			extraPay=overtime*incrWage;
+			weekWage=(wage*40) + extraPay;
+		
+		return weekWage;	
+	}
+
+
+	public String toString()
+	{
+		String name=getName();
+		String dollars=toDollars(getWage());
+		int pad=35-dollars.length();
+		return pad(name,pad)+ dollars + "/hour";
+	}
+	
+	
+	 public static String pad(String str, int n)
+	 {
+		if (str.length() > n)
+			return str.substring(0,n);
+		while (str.length() < n)
+			str += " ";
+		return str;
+	}
+
+	public static String toDollars (double amount)
+	{
+	  long roundedAmount = Math.round(amount * 100);
+	  long dollars = roundedAmount / 100;
+    	  long cents = roundedAmount % 100;
+
+	    if (cents <= 9)
+	      return dollars + ".0" + cents;
+	    else
+	      return dollars + "." + cents;	
+	}
+	
+}
+]0;fowler_l@cobra:~/Prog3[fowler_l@cobra Prog3]$ java Personnel
+----------------------------------------
+|                                      |
+|Commands: n - new employee            |
+|          c - Compute paychecks       |
+|          r - Raise wages             |
+|          p - Print records           |
+|          d - Download data           |
+|          u - Upload data             |
+|          q - Quit                    |
+|                                      |
+----------------------------------------
+n
+Enter the name of the New Employee
+Lauren Fowler
+Enter h for hourly employee, enter s for salaried
+s
+Enter annual salary
+340000
+----------------------------------------
+|                                      |
+|Commands: n - new employee            |
+|          c - Compute paychecks       |
+|          r - Raise wages             |
+|          p - Print records           |
+|          d - Download data           |
+|          u - Upload data             |
+|          q - Quit                    |
+|                                      |
+----------------------------------------
+c c
+Please enter the hours worked by Lauren Fowler
+40
+Pay: 6538.46
+----------------------------------------
+|                                      |
+|Commands: n - new employee            |
+|          c - Compute paychecks       |
+|          r - Raise wages             |
+|          p - Print records           |
+|          d - Download data           |
+|          u - Upload data             |
+|          q - Quit                    |
+|                                      |
+----------------------------------------
+d
+----------------------------------------
+|                                      |
+|Commands: n - new employee            |
+|          c - Compute paychecks       |
+|          r - Raise wages             |
+|          p - Print records           |
+|          d - Download data           |
+|          u - Upload data             |
+|          q - Quit                    |
+|                                      |
+----------------------------------------
+p
+Lauren Fowler             340000.00/year
+David Rebellon                65.00/hour
+----------------------------------------
+|                                      |
+|Commands: n - new employee            |
+|          c - Compute paychecks       |
+|          r - Raise wages             |
+|          p - Print records           |
+|          d - Download data           |
+|          u - Upload data             |
+|          q - Quit                    |
+|                                      |
+----------------------------------------
+u
+----------------------------------------
+|                                      |
+|Commands: n - new employee            |
+|          c - Compute paychecks       |
+|          r - Raise wages             |
+|          p - Print records           |
+|          d - Download data           |
+|          u - Upload data             |
+|          q - Quit                    |
+|                                      |
+----------------------------------------
+r
+Please enter percentage increase
+35
+Lauren Fowler             459000.00/year
+David Rebellon                87.75/hour
+----------------------------------------
+|                                      |
+|Commands: n - new employee            |
+|          c - Compute paychecks       |
+|          r - Raise wages             |
+|          p - Print records           |
+|          d - Download data           |
+|          u - Upload data             |
+|          q - Quit                    |
+|                                      |
+----------------------------------------
+q
+]0;fowler_l@cobra:~/Prog3[fowler_l@cobra Prog3]$ exit
+exit
+
+Script done on Wed 09 Nov 2016 11:25:03 PM EST

@@ -1,0 +1,70 @@
+
+public class Pez
+{
+	public static void main(String []args) throws CloneNotSupportedException
+	{
+		Stack pez=new Stack();
+		populateStack(pez);
+		pez=removeGreen(pez);
+		printPez(pez);
+	}
+
+	
+
+	public static void  populateStack(Stack pez)
+	{
+		pez.push("yellow");
+		pez.push("red");
+		pez.push("green");
+		pez.push("green");
+		pez.push("yellow");
+		pez.push("yellow");
+		pez.push("red");
+		pez.push("green");
+
+	}
+
+	public static Stack removeGreen(Stack pez) 
+	{
+		Stack tempPez= new Stack();
+		String topPez= (String) pez.pop();
+		
+		while (topPez.compareTo("green")==0)
+		{
+			topPez=(String) pez.pop();
+		}
+
+		while(!pez.isEmpty())	
+		{
+			if( topPez.compareTo("green")==0)
+			{
+				System.out.println("Removed " + topPez); 	
+				topPez=(String) pez.pop();	
+			}
+			else 
+				System.out.println("Pushed " + topPez);
+				topPez= (String) pez.pop();
+				tempPez.push(topPez);	
+
+			}
+
+		while(!tempPez.isEmpty())
+		{
+			pez.push(tempPez.pop());
+		}		
+		
+		return pez;
+	
+	}
+
+	public static void printPez(Stack pez) throws CloneNotSupportedException
+	{
+		Stack tempPez=(Stack) pez.clone();
+		while(!tempPez.isEmpty())
+		{
+			System.out.println(tempPez.pop());		
+		}	
+	}
+	
+	}
+

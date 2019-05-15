@@ -1,0 +1,36 @@
+The Personnel project is supposed to store a database of employee data, both salaried and hourly employees
+The Employee class is an abstract class that both SalariedEmployee and HourlyEmployee extend
+and its methods include: getName(), getWage(), setRaise(), and an abstract method called computePay()
+
+HourlyEmployee extends Employee and the object stores infomation about an employee paid by the hour. 
+It will compute overtime pay for employees that have worked over 40 hours. 
+
+SalariedEmployee extends Employee and the object stores information about an employee paid on a yearly salary
+The salary returned is based on the employee working 40 hours a week, for 52 weeks. 
+
+The Personnel class runs the program. 
+The switch statement takes in a char parameter which was inputted in the display menu method. 
+
+displayMenu() prints out all the menu options and reads in a String but returns a char at position 0
+
+When 'n' is selected, the switch statement calls getInfo() which takes infomation from the user about 
+the name, type, and salary of the employee, and uses that infomration to call newEmployee() to create an
+employee object. The employee object is then returned to the switch statement and added to the employee
+array list. 
+
+when 'c' is selected, the switch statement calls calculatePay() which takes input about the number of hours
+an employee worked from a user and then returns the weekly salary of each employee
+
+when 'r' is selcted, the switch statement calls raiseWages() which promts the user to input the percent increase
+of salary for all employees, and the new wages are then returned 
+
+when 'p' is selcted, the switch statement calls printRecords() which uses a for loop to print out the toString of each
+employee object in the database array list
+
+when 'd' is selected, the switch statement calls downData() which imports every object in the external file called
+employees.dat
+
+when 'p' is selected, the switch statment calls uploadData() which writes out every object in the database to an external file
+employees.dat
+
+when 'q' is selcted, the while loop breaks and the program is terminated. 

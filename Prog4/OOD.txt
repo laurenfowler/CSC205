@@ -1,0 +1,52 @@
+input example: 
+
+	job1 05 05
+	job2 07 02
+	job3 09 06
+	job4 12 03
+	job5 14 08
+
+output example:
+
+	job id  arrival start  run   wait   turnaround
+		time    time   time  time   time
+	------  ------  ----  -----  ----  ----------
+	
+	job1     5       5     5      0       5
+	job2     7       10    2      3       5
+	job3     9       12    6      3       9
+	job4     12      18    3      6       9
+	job5     14      21    8      7       15
+
+
+algorithm: 
+
+	--file is read in from the command line in the fileReader(String [] args) 
+	  that takes in the .dat file as a parameter
+
+	--the arrival queue in filled and an ouput queue is instantiated
+	
+	--an array is instaniated to hold usageTime and idleTime
+
+	--processJobs() is called that takes paramters of an arrival and ouput queue, along with an array.
+	  Instance variables clockTime, idleTime, and usageTime are created. A new queue called jobQueue is also created. 
+		--there are several if statements inside the method. 
+			-- the first if statement calls checkRecord(), a method that checks
+		  	   to see if a job has arrived, and if it has it puts it in a jobQueue.
+			-- the second if statement calls checkJobRecord() which does two things. The first thing job 
+			   record does is check to see if a job needs to be removed from the jobQueue and inserted
+			   into the output queue. The second thing job record does is check to see if a job needs to
+			    be started, and also sets the wait time by subtracting the arrival time by the clockTime
+			-- the third if statement also calls checkJobRecord() to see if another jobs needs to be started
+			   in the same clock increment as a job is removed
+			-- the fourth if statement increments idle time if the jobQueue is empty but the arrival queue is not
+			-- the fifth if statement updates usage time if the jobQueue is not empty
+		--once the algorithm has been gone through, the clockTime increments by one and the method loops while either
+		  the job queue or arrival queue are not empty
+
+	--the printReport() method is called to print out the CPU usage. It takes a paramter of an ouput Queue and an array 
+	  with the idle time and usage time
+		--Wait time is calucated by dividing the total wait time of each job by the total number or jobs
+		--CPU usage time is calculated by dividing the usage time by the usage time plus the idle time
+		
+		 
